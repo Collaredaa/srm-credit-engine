@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: srm-credit-engine-db
+
+    environment:
+      POSTGRES_DB: srm_credit_engine
+      POSTGRES_USER: srm
+      POSTGRES_PASSWORD: srm
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
