@@ -63,7 +63,7 @@ class GoldenCasesTest {
 
         BigDecimal presentValueInUsd = conversionService.convert(
                 pricingResult.presentValue(),
-                brlToUsdRate);
+                usdToBrlRate);
 
         assertEquals(new BigDecimal("92859.94"), pricingResult.presentValue());
         assertEquals(new BigDecimal("17094.67"), presentValueInUsd);
