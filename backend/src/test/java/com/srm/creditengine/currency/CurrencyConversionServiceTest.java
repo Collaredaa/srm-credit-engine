@@ -12,8 +12,8 @@ class CurrencyConversionServiceTest {
     @Test
     void shouldConvertBrlToUsd() {
         ExchangeRate exchangeRate = new ExchangeRate(
-                Currency.BRL,
                 Currency.USD,
+                Currency.BRL,
                 new BigDecimal("5.4321"));
 
         BigDecimal convertedAmount = conversionService.convert(
