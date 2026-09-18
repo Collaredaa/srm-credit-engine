@@ -12,10 +12,11 @@ public class TermCalculator {
         Objects.requireNonNull(currentDate, "currentDate must not be null");
         Objects.requireNonNull(dueDate, "dueDate must not be null");
 
-        long termInMonths = ChronoUnit.MONTHS.between(currentDate, dueDate);
-        if (termInMonths < 0) {
-            throw new IllegalArgumentException("dueDate must not be before the settlement date");
+        if (dueDate.isBefore(currentDate)) {
+            throw new IllegalArgumentException("dueDate must not be before the current date");
         }
+
+        long termInMonths = ChronoUnit.MONTHS.between(currentDate, dueDate);
         return Math.toIntExact(termInMonths);
     }
 }
