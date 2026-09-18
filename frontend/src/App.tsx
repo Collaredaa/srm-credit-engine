@@ -47,7 +47,7 @@ const initialSettlementPage: SpringPage<SettlementResult> = {
 function App() {
   const [notice, setNotice] = useState<Notice>({
     kind: 'info',
-    message: 'Ready to connect with the backend API.',
+    message: 'API backend disponível.',
   })
   const [loading, setLoading] = useState(false)
 
@@ -88,10 +88,10 @@ function App() {
 
   const settlementSummary = useMemo(() => {
     if (!lastSettlement) {
-      return 'No settlement created in this session yet.'
+      return 'Nenhuma liquidação criada nesta sessão.'
     }
 
-    return `${lastSettlement.paymentCurrency} ${formatMoney(lastSettlement.paymentAmount)} for receivable ${shortId(lastSettlement.receivableId)}`
+    return `${lastSettlement.paymentCurrency} ${formatMoney(lastSettlement.paymentAmount)} para o recebível ${shortId(lastSettlement.receivableId)}`
   }, [lastSettlement])
 
   useEffect(() => {
@@ -156,7 +156,7 @@ function App() {
       setSettlementReceivableId(receivable.id)
       setNotice({
         kind: 'success',
-        message: `Receivable ${shortId(receivable.id)} created.`,
+        message: `Recebível ${shortId(receivable.id)} criado com sucesso.`,
       })
     } catch (error) {
       setNotice({ kind: 'error', message: messageFromError(error) })
@@ -180,7 +180,7 @@ function App() {
       setLastExchangeRate(exchangeRate)
       setNotice({
         kind: 'success',
-        message: `Exchange rate ${exchangeRate.sourceCurrency}/${exchangeRate.targetCurrency} saved.`,
+        message: `Taxa de câmbio ${exchangeRate.sourceCurrency}/${exchangeRate.targetCurrency} salva com sucesso.`,
       })
     } catch (error) {
       setNotice({ kind: 'error', message: messageFromError(error) })
@@ -205,7 +205,7 @@ function App() {
       setLastSettlement(settlement)
       setNotice({
         kind: 'success',
-        message: `Settlement ${shortId(settlement.id)} returned by API.`,
+        message: `Liquidação ${shortId(settlement.id)} retornada pela API.`,
       })
       await refreshSettlements(0)
     } catch (error) {
@@ -220,22 +220,22 @@ function App() {
       <header className="app-header">
         <div>
           <p className="eyebrow">SRM Credit Engine</p>
-          <h1>Operations console</h1>
+          <h1>Painel de Operações</h1>
         </div>
         <div className={`notice ${notice.kind}`} role="status">
           {notice.message}
         </div>
       </header>
 
-      <section className="workflow-grid" aria-label="API workflow">
+      <section className="workflow-grid" aria-label="Fluxo da API">
         <form className="panel" onSubmit={handleCreateReceivable}>
           <div className="panel-heading">
-            <h2>Receivable</h2>
+            <h2>Recebível</h2>
             <span>POST /api/v1/receivables</span>
           </div>
 
           <label>
-            Assignor
+            Cedente
             <input
               value={assignor}
               onChange={(event) => setAssignor(event.target.value)}
@@ -244,7 +244,7 @@ function App() {
           </label>
 
           <label>
-            Type
+            Tipo
             <select
               value={receivableType}
               onChange={(event) =>
@@ -262,7 +262,7 @@ function App() {
 
           <div className="field-row">
             <label>
-              Face value
+              Valor de Face
               <input
                 inputMode="decimal"
                 value={faceValue}
@@ -271,7 +271,7 @@ function App() {
               />
             </label>
             <label>
-              Due date
+              Data de Vencimento
               <input
                 type="date"
                 value={dueDate}
@@ -282,28 +282,28 @@ function App() {
           </div>
 
           <button type="submit" disabled={loading}>
-            Create receivable
+            Criar Recebível
           </button>
 
           <ResultLine
-            label="Last receivable"
+            label="Último Recebível"
             value={
               lastReceivable
                 ? `${shortId(lastReceivable.id)} - ${lastReceivable.status}`
-                : 'None'
+                : 'Nenhum'
             }
           />
         </form>
 
         <form className="panel" onSubmit={handleCreateExchangeRate}>
           <div className="panel-heading">
-            <h2>Exchange rate</h2>
+            <h2>Taxa de Câmbio</h2>
             <span>POST /api/v1/exchange-rates</span>
           </div>
 
           <div className="field-row">
             <label>
-              Source
+              Moeda de Origem
               <select
                 value={sourceCurrency}
                 onChange={(event) =>
@@ -319,7 +319,7 @@ function App() {
               </select>
             </label>
             <label>
-              Target
+              Moeda de Destino
               <select
                 value={targetCurrency}
                 onChange={(event) =>
@@ -337,7 +337,7 @@ function App() {
           </div>
 
           <label>
-            Rate
+            Taxa
             <input
               inputMode="decimal"
               value={rate}
@@ -347,7 +347,7 @@ function App() {
           </label>
 
           <label>
-            Effective at
+            Vigente a partir de
             <input
               value={effectiveAt}
               onChange={(event) => setEffectiveAt(event.target.value)}
@@ -356,27 +356,27 @@ function App() {
           </label>
 
           <button type="submit" disabled={loading}>
-            Save rate
+            Salvar Taxa
           </button>
 
           <ResultLine
-            label="Last rate"
+            label="Última Taxa"
             value={
               lastExchangeRate
                 ? `${lastExchangeRate.sourceCurrency}/${lastExchangeRate.targetCurrency} ${lastExchangeRate.rate}`
-                : 'None'
+                : 'Nenhuma'
             }
           />
         </form>
 
         <form className="panel" onSubmit={handleCreateSettlement}>
           <div className="panel-heading">
-            <h2>Settlement</h2>
+            <h2>Liquidação</h2>
             <span>POST /api/v1/settlements</span>
           </div>
 
           <label>
-            Receivable id
+            ID do Recebível
             <input
               value={settlementReceivableId}
               onChange={(event) => setSettlementReceivableId(event.target.value)}
@@ -386,7 +386,7 @@ function App() {
 
           <div className="field-row">
             <label>
-              Payment currency
+              Moeda de Pagamento
               <select
                 value={paymentCurrency}
                 onChange={(event) =>
@@ -402,7 +402,7 @@ function App() {
               </select>
             </label>
             <label>
-              Idempotency-Key
+              Chave de Idempotência
               <input
                 value={idempotencyKey}
                 onChange={(event) => setIdempotencyKey(event.target.value)}
@@ -413,7 +413,7 @@ function App() {
 
           <div className="actions">
             <button type="submit" disabled={loading}>
-              Settle
+              Liquidar
             </button>
             <button
               type="button"
@@ -421,25 +421,25 @@ function App() {
               onClick={() => setIdempotencyKey(crypto.randomUUID())}
               disabled={loading}
             >
-              New key
+              Nova Chave
             </button>
           </div>
 
-          <ResultLine label="Last settlement" value={settlementSummary} />
+          <ResultLine label="Última Liquidação" value={settlementSummary} />
         </form>
       </section>
 
-      <section className="simulation-section" aria-label="Pricing simulation">
+      <section className="simulation-section" aria-label="Simulação de Precificação">
         <div className="section-bar">
           <div>
-            <h2>Pricing simulation</h2>
+            <h2>Simulação de Precificação</h2>
             <span>POST /api/v1/pricing/simulations</span>
           </div>
           <strong className={`simulation-status ${simulationStatus}`}>
-            {simulationStatus === 'loading' && 'Calculating...'}
-            {simulationStatus === 'success' && 'Ready'}
-            {simulationStatus === 'error' && 'Needs attention'}
-            {simulationStatus === 'idle' && 'Waiting for valid input'}
+            {simulationStatus === 'loading' && 'Calculando...'}
+            {simulationStatus === 'success' && 'Pronto'}
+            {simulationStatus === 'error' && 'Requer atenção'}
+            {simulationStatus === 'idle' && 'Aguardando dados válidos'}
           </strong>
         </div>
 
@@ -448,43 +448,43 @@ function App() {
         )}
 
         <div className="simulation-grid">
-          <Metric label="Face value" value={formatMoney(simulation?.faceValue)} />
+          <Metric label="Valor de Face" value={formatMoney(simulation?.faceValue)} />
           <Metric
-            label="Term"
+            label="Prazo"
             value={
-              simulation ? `${simulation.termInMonths.toString()} months` : '-'
+              simulation ? `${simulation.termInMonths.toString()} meses` : '-'
             }
           />
-          <Metric label="Base rate" value={formatRate(simulation?.baseRate)} />
+          <Metric label="Taxa Base" value={formatRate(simulation?.baseRate)} />
           <Metric label="Spread" value={formatRate(simulation?.spread)} />
           <Metric
-            label="Present value BRL"
+            label="Valor Presente em BRL"
             value={formatMoney(simulation?.presentValueBrl)}
           />
           <Metric
-            label="Discount"
+            label="Deságio"
             value={formatMoney(simulation?.discountAmount)}
           />
-          <Metric label="Payment currency" value={simulation?.paymentCurrency ?? '-'} />
+          <Metric label="Moeda de Pagamento" value={simulation?.paymentCurrency ?? '-'} />
           <Metric
-            label="Net payment"
+            label="Valor Líquido"
             value={formatMoney(simulation?.paymentAmount)}
           />
           <Metric
-            label="Exchange rate"
+            label="Taxa de Câmbio"
             value={
               simulation?.exchangeRate
-                ? `${simulation.exchangeRate.toString()} effective ${formatDateTime(simulation.exchangeRateEffectiveAt)}`
+                ? `${simulation.exchangeRate.toString()} vigente em ${formatDateTime(simulation.exchangeRateEffectiveAt)}`
                 : '-'
             }
           />
         </div>
       </section>
 
-      <section className="table-section" aria-label="Settlements">
+      <section className="table-section" aria-label="Liquidações">
         <div className="section-bar">
           <div>
-            <h2>Settlements</h2>
+            <h2>Liquidações</h2>
             <span>
               GET /api/v1/settlements?page={page}&size={settlements.size}
             </span>
@@ -496,7 +496,7 @@ function App() {
               disabled={loading}
               onClick={() => void refreshSettlements(page)}
             >
-              Refresh
+              Atualizar
             </button>
             <button
               type="button"
@@ -504,10 +504,10 @@ function App() {
               disabled={!canGoBack || loading}
               onClick={() => void refreshSettlements(page - 1)}
             >
-              Previous
+              Anterior
             </button>
             <span>
-              Page {settlements.totalPages === 0 ? 0 : page + 1} of{' '}
+              Página {settlements.totalPages === 0 ? 0 : page + 1} de{' '}
               {settlements.totalPages}
             </span>
             <button
@@ -516,7 +516,7 @@ function App() {
               disabled={!canGoNext || loading}
               onClick={() => void refreshSettlements(page + 1)}
             >
-              Next
+              Próxima
             </button>
           </div>
         </div>
@@ -525,13 +525,13 @@ function App() {
           <table>
             <thead>
               <tr>
-                <th>Settlement</th>
-                <th>Receivable</th>
-                <th>Currency</th>
-                <th>Payment</th>
-                <th>Present BRL</th>
-                <th>FX rate</th>
-                <th>Settled at</th>
+                <th>LIQUIDAÇÃO</th>
+                <th>RECEBÍVEL</th>
+                <th>MOEDA</th>
+                <th>PAGAMENTO</th>
+                <th>VALOR PRESENTE BRL</th>
+                <th>TAXA DE CÂMBIO</th>
+                <th>LIQUIDADO EM</th>
               </tr>
             </thead>
             <tbody>
@@ -549,7 +549,7 @@ function App() {
               {settlements.empty && (
                 <tr>
                   <td colSpan={7} className="empty-state">
-                    No settlements returned by the API.
+                    Nenhuma liquidação retornada pela API.
                   </td>
                 </tr>
               )}
@@ -584,7 +584,7 @@ function messageFromError(error: unknown) {
     return error.message
   }
 
-  return 'Unexpected error'
+  return 'Erro inesperado'
 }
 
 function shortId(value: string) {
